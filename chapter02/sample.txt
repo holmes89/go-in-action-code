@@ -1,0 +1,12 @@
+This is a sample text file for testing the word count program.
+It has multiple lines and various words to count.
+Let's see how well our program works!
+
+The program should handle:
+- Multiple spaces  between   words
+- Empty lines
+
+- Different punctuation marks!
+- Numbers like 123 and 456
+
+Total words in this file should be counted correctly.

@@ -1,0 +1,8 @@
+{
+  "name": "testapp",
+  "version": "2.1.3",
+  "debug": true,
+  "port": 3000,
+  "host": "api.example.com",
+  "log_level": "debug"
+}

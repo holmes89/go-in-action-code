@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration name="testapp" version="2.1.3">
+  <debug>true</debug>
+  <port>3000</port>
+  <host>api.example.com</host>
+  <log_level>debug</log_level>
+</configuration>
