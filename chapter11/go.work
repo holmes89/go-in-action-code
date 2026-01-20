@@ -1,0 +1,128 @@
+go 1.22
+
+use (
+	./api
+	./newsroom
+)
+
+// =============================================================================
+// GO WORKSPACE - Development-time module coordination
+// =============================================================================
+//
+// This go.work file defines a workspace that includes both the api and
+// newsroom modules. During development, Go automatically uses the local
+// versions of these modules instead of fetching from remote repositories.
+//
+// Benefits of Workspaces:
+//
+// 1. Local Development: Make changes across modules without publishing
+//    - Edit newsroom code, see changes instantly in API
+//    - No need for version tags or releases
+//    - Rapid iteration during development
+//
+// 2. Independent Versioning: Each module has its own go.mod
+//    - API can be at v1.5.2
+//    - Newsroom can be at v0.2.0
+//    - Different maturity levels
+//    - Different release cadences
+//
+// 3. Clean Separation: Workspace is development-only
+//    - Users don't see or use go.work
+//    - They get published versions from module proxy
+//    - go.work should NOT be committed (add to .gitignore)
+//    - Production builds use go.mod, not go.work
+//
+// 4. Module Boundaries: Clear separation of concerns
+//    - API handles HTTP and storage
+//    - Newsroom handles AI summarization
+//    - Each can evolve independently
+//    - Easy to test in isolation
+//
+// Commands for workspace management:
+//
+//   # Initialize a workspace
+//   go work init ./api
+//
+//   # Add another module to workspace
+//   go work use ./newsroom
+//
+//   # List modules in workspace
+//   go work edit -print
+//
+//   # Sync dependencies across workspace
+//   go work sync
+//
+// Directory structure with workspace:
+//
+//   go-news/
+//   ├── go.work          ← Workspace definition (this file)
+//   ├── api/
+//   │   ├── go.mod       ← API module definition
+//   │   ├── go.sum       ← API dependency checksums
+//   │   ├── cmd/
+//   │   │   └── api/
+//   │   │       └── main.go
+//   │   └── internal/
+//   │       ├── feed/
+//   │       ├── reader/
+//   │       ├── store/
+//   │       └── handlers/
+//   └── newsroom/
+//       ├── go.mod       ← Newsroom module definition
+//       ├── go.sum       ← Newsroom dependency checksums
+//       ├── summarizer.go
+//       └── cmd/
+//           └── newsroom/
+//               └── main.go
+//
+// Workflow example:
+//
+//   1. Developer edits newsroom/summarizer.go
+//   2. Changes are immediately visible in api/
+//   3. Run API: cd api && go run ./cmd/api
+//   4. API uses local newsroom code automatically
+//   5. No version bumps or publishing needed
+//
+// When to use workspaces:
+//
+// - Monorepo with multiple related modules
+// - Library + example application
+// - Microservices that share common packages
+// - Plugin architecture with core + plugins
+// - Any time you need to develop multiple modules together
+//
+// When NOT to use workspaces:
+//
+// - Single module projects (just use go.mod)
+// - Unrelated modules that don't interact
+// - Third-party dependencies (those come from module proxy)
+//
+// Production deployment:
+//
+// When releasing, you:
+// 1. Tag and publish newsroom module
+//    git tag -a newsroom/v0.2.0 -m "Add AI summarization"
+//    git push origin newsroom/v0.2.0
+//
+// 2. Update API's go.mod to reference published version
+//    require github.com/YOUR_USERNAME/go-news/newsroom v0.2.0
+//
+// 3. Tag and publish API module
+//    git tag -a api/v1.5.2 -m "Add summary endpoint"
+//    git push origin api/v1.5.2
+//
+// Users then import your modules normally:
+//   import "github.com/YOUR_USERNAME/go-news/api"
+//   import "github.com/YOUR_USERNAME/go-news/newsroom"
+//
+// They get the published versions, not your local dev code.
+//
+// This workspace pattern is essential for:
+// - Clean architecture with module boundaries
+// - Independent evolution of components
+// - Team collaboration on related modules
+// - Maintaining API stability while experimenting with new features
+//
+// The workspace is your development environment.
+// The published modules are your production artifacts.
+// Keep them separate, and you get the best of both worlds.
